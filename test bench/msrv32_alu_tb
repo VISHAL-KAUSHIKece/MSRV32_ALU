@@ -1,0 +1,68 @@
+
+
+
+
+
+
+module msrv32_alu_tb;
+
+  //TB global variables
+
+   reg [31:0] op_1_in,op_2_in;
+   reg[3:0]opcode_in;
+   wire[31:0]result_out;
+  
+
+   //Step 1 : Instantiate the design ALU
+
+  msrv32_alu ALU(
+           op_1_in,          //operand 1 (i.e rs1_in)
+           op_2_in,          //operand 2 (i.e rs2_in/immidiate)
+           opcode_in,        //opcode (funct3 or funct7)
+           result_out,       //result
+         );
+
+   
+   //step 2 : write a task named " initialize" to inilialize the input to DUT
+
+   task initialize;
+     begin
+       op_1_in    =  32'b0;
+       op_2_in    =  32'b0;
+       opcode_in  =  32'b0;
+      end
+   endtask
+
+   
+   //step 3 : declare task with arguments for generating the stimulus
+
+   task stimulus( input [31:0]op_1,op_2,
+                  input [31:0]opcode );
+        begin
+        #10
+          op_1_in    =  op_1;
+          op_2_in    =  op_2; 
+          opcode_in  =  opcode;
+         end
+    endtask
+
+
+    //step 4 : call the tasks within the initial process
+
+    initial  
+       begin
+         initialize;
+         stimulus(32'd20,32'd40,4'b0000);
+         stimulus(32'd20,32'd40,4'b1000);
+         stimulus(32'd60,32'd50,4'b0000);
+         #100 $finish;
+       end
+
+ 
+     //process to monitor the changes in the variables
+     
+     initial
+           $monitor("Inputs operand1=%d, operand2=%d, opcode=%d, output result_out=%d",op_1_in,op_2_in,opcode_in,result_out);
+
+
+endmodule
