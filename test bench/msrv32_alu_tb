@@ -19,7 +19,7 @@ module msrv32_alu_tb;
            op_1_in,          //operand 1 (i.e rs1_in)
            op_2_in,          //operand 2 (i.e rs2_in/immidiate)
            opcode_in,        //opcode (funct3 or funct7)
-           result_out,       //result
+           result_out        //result
          );
 
    
